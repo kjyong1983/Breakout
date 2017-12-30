@@ -47,7 +47,11 @@ public class Ball : MonoBehaviour {
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            dx *= maxSpeed;
+            var distance = transform.position.x - player.transform.position.x;
+
+            var modfier = distance / (player.transform.lossyScale.x / 2);
+            
+            dx *= maxSpeed * modfier;
             dy *= -maxSpeed;
 
             hitByPlayer = true;
