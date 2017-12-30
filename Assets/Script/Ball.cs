@@ -68,9 +68,14 @@ public class Ball : MonoBehaviour {
             hitByPlayer = false;
             
         }
+        else if (collision.gameObject.CompareTag("Block"))
+        {
+            dy *= -1;
+        }
         else//left, right wall
         {
             dx *= -1;
         }
+
     }
 }
