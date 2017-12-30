@@ -6,8 +6,8 @@ public class Ball : MonoBehaviour {
 
     float x, y;
     [SerializeField] float dx, dy;
-    const float minSpeed = 2f;
-    const float maxSpeed = 10f;
+    const float minSpeed = 3f;
+    const float maxSpeed = 15f;
 
     float distance;
     bool hitByPlayer = false;
@@ -32,21 +32,13 @@ public class Ball : MonoBehaviour {
         distance = Mathf.Abs(player.transform.position.y - gameObject.transform.position.y);
 
 
-        if (distance < 1f && !hitByPlayer)
+        if (distance < 2f && !hitByPlayer)
         {
-            Debug.Log("distance = " + distance);
 
-            //rb.velocity = rb.velocity.normalized;
-            //rb.velocity.Normalize();
             dx = Mathf.Sign(dx) * minSpeed;
             dy = Mathf.Sign(dy) * minSpeed;
         }
 
-        //if (dy > 20)
-        //{
-        //    dy = Mathf.Sign(dy) * minSpeed;
-        //    //Debug.Break();
-        //}
         rb.velocity = new Vector2(dx, dy);
 
     }
@@ -75,7 +67,6 @@ public class Ball : MonoBehaviour {
         else//left, right wall
         {
             dx *= -1;
-            hitByPlayer = false;
         }
     }
 }
