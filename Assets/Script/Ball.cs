@@ -6,11 +6,15 @@ public class Ball : MonoBehaviour {
 
     float x, y;
     [SerializeField] float dx, dy;
+    [SerializeField] float modifier;
     const float minSpeed = 3f;
     const float maxSpeed = 15f;
 
+    [SerializeField] float angle;
+
     float distance;
     bool hitByPlayer = false;
+    bool isReduced = false;
 
     Rigidbody2D rb;
     GameObject player;
@@ -32,14 +36,17 @@ public class Ball : MonoBehaviour {
         distance = Mathf.Abs(player.transform.position.y - gameObject.transform.position.y);
 
 
-        if (distance < 2f && !hitByPlayer)
+        if (distance < 2f && !hitByPlayer && !isReduced)
         {
-
-            dx = Mathf.Sign(dx) * minSpeed;
+            isReduced = true;
+            dx = Mathf.Sign(dx) * minSpeed * modifier;
             dy = Mathf.Sign(dy) * minSpeed;
         }
 
         rb.velocity = new Vector2(dx, dy);
+        angle = Vector2.Angle(Vector2.zero, new Vector2(dx, dy));
+
+        Debug.Log("dx " + dx + " dy " + dy);
 
     }
 
@@ -49,12 +56,13 @@ public class Ball : MonoBehaviour {
         {
             var distance = transform.position.x - player.transform.position.x;
 
-            var modfier = distance / (player.transform.lossyScale.x / 2);
+            modifier = distance / (player.transform.lossyScale.x / 2);
             
-            dx *= maxSpeed * modfier;
+            dx *= maxSpeed * modifier;
             dy *= -maxSpeed;
 
             hitByPlayer = true;
+            isReduced = false;
 
         }
         else if (collision.gameObject.CompareTag("SafeWall"))
