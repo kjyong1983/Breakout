@@ -6,22 +6,18 @@ public class Ball : MonoBehaviour {
 
     float x, y;
     [SerializeField] float dx, dy;
-    [SerializeField] float modifier;
-    const float minSpeed = 3f;
+    const float minSpeed = 2.5f;
     const float maxSpeed = 15f;
-
-    [SerializeField] float angle;
 
     float distance;
     bool hitByPlayer = false;
-    bool isReduced = false;
 
     Rigidbody2D rb;
     GameObject player;
 
 	// Use this for initialization
 	void Start () {
-        dx = Random.Range(-1f, 1f);
+        dx = Random.Range(-1, 1) * 3;
         dy = -1 * minSpeed;
 
         player = GameObject.FindGameObjectWithTag("Player");
@@ -36,17 +32,14 @@ public class Ball : MonoBehaviour {
         distance = Mathf.Abs(player.transform.position.y - gameObject.transform.position.y);
 
 
-        if (distance < 2f && !hitByPlayer && !isReduced)
+        if (distance < 2f && !hitByPlayer)
         {
-            isReduced = true;
-            dx = Mathf.Sign(dx) * minSpeed * modifier;
+
+            dx = Mathf.Sign(dx) * minSpeed;
             dy = Mathf.Sign(dy) * minSpeed;
         }
 
         rb.velocity = new Vector2(dx, dy);
-        angle = Vector2.Angle(Vector2.zero, new Vector2(dx, dy));
-
-        Debug.Log("dx " + dx + " dy " + dy);
 
     }
 
@@ -56,13 +49,12 @@ public class Ball : MonoBehaviour {
         {
             var distance = transform.position.x - player.transform.position.x;
 
-            modifier = distance / (player.transform.lossyScale.x / 2);
+            var modfier = distance / (player.transform.lossyScale.x / 2);
             
-            dx *= maxSpeed * modifier;
+            dx *= maxSpeed * modfier;
             dy *= -maxSpeed;
 
             hitByPlayer = true;
-            isReduced = false;
 
         }
         else if (collision.gameObject.CompareTag("SafeWall"))
